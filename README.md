@@ -1,17 +1,10 @@
 # AMBA AXI4-Lite Slave UVM Verification Environment
 
-![SystemVerilog](https://img.shields.io/badge/SystemVerilog-00599C?style=for-the-badge)
-![UVM](https://img.shields.io/badge/UVM-1.2-brightgreen?style=for-the-badge)
-![VCS](https://img.shields.io/badge/Synopsys_VCS-563D7C?style=for-the-badge)
-
 ## 📌 Project Overview
 The objective of this project is to verify the functional correctness and protocol compliance of an AMBA AXI4-Lite slave design using the Universal Verification Methodology (UVM)[cite: 1]. AXI4-Lite is widely used for low-throughput control register accesses, requiring strict adherence to unpipelined, in-order handshake protocols across its address, data, and response channels[cite: 1]. This verification environment is built in SystemVerilog using Synopsys VCS and Verdi[cite: 1]. The testing strategy employs constrained-random stimulus generation to cover base operational scenarios, Assertion-Based Verification (ABV) for continuous protocol monitoring, and negative testing techniques via UVM Factory overrides to validate the design's robustness against intentional protocol violations[cite: 1].
 
 ## 🏗️ Verification Architecture
 The environment follows a standard UVM topology, utilizing transaction-level modeling (TLM) to decouple stimulus generation from signal-level pin toggling[cite: 1]. The architecture is designed to handle strict delta-cycle scheduling and avoid race conditions during continuous capture[cite: 1].
-
-![AXI4-Lite UVM testbench architecture](axi_lt_top_architecture.png)
-*(Note: Upload Figure 1 from your report as `axi_lt_top_architecture.png`)*
 
 * **Sequences and Sequencer:** Generates randomized `axi_lt_seq_item` transactions[cite: 1]. The environment utilizes a dual-sequencer architecture—one dedicated to write sequences and another to read sequences—to accurately model the independent nature of the AXI protocol's read and write channels[cite: 1]. Dedicated error sequences (e.g., `axi_lt_w2_seq`) are used to target corner cases[cite: 1].
 * **Driver:** Translates TLM transactions into cycle-accurate AXI4-Lite pin toggles[cite: 1]. The driver implements an additional TLM pull port (`uvm_seq_item_pull_port #(axi_lt_seq_item) seq_item_port_rd;`) to fetch from both sequencers independently and drive read and write channels concurrently using `fork...join` blocks[cite: 1]. A custom `axi_lt_error_driver` is registered in the UVM Factory to safely inject protocol errors using watchdog timers to prevent simulation deadlocks[cite: 1].
@@ -21,9 +14,6 @@ The environment follows a standard UVM topology, utilizing transaction-level mod
 
 ## 🧪 Test Plan & Execution
 The verification strategy includes reset/sanity tests, decoupled channel timing manipulation, error response boundary targeting (read-only, out-of-bounds, unaligned), and stress/override testing[cite: 1]. 
-
-![Coverage Plan](coverage_plan.png)
-*(Note: Upload Figure 3 from your report as `coverage_plan.png`)*
 
 | Feature | Test Name | Expected Output | Status | Failure Reason (If Applicable) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -58,9 +48,6 @@ The verification environment utilizes Synopsys VCS and Verdi to extract structur
 ### Code Coverage (88.72%)
 The extended test cases drove a massive improvement in toggle activity (up from 61.68%), confirming nearly all internal memory registers and data bus nodes successfully transitioned between 0-to-1 and 1-to-0 states[cite: 1].
 
-![Verdi Code Coverage](code_coverage_summary.png)
-*(Note: Upload Figure 2 from your report as `code_coverage_summary.png`)*
-
 * **Toggle Coverage:** 99.33%[cite: 1]
 * **Line Coverage:** 97.37%[cite: 1]
 * **Branch Coverage:** 89.66%[cite: 1]
@@ -68,10 +55,7 @@ The extended test cases drove a massive improvement in toggle activity (up from 
 * **FSM Coverage:** 70.00% (Bottlenecked by BUG-1 deadlock)[cite: 1]
 
 ### Functional Coverage (100%)
-The SystemVerilog UVM subscriber (`axi_lt_subscriber`) maintained 100.00% functional coverage across all 50 expected bins[cite: 1].
-
-![Verdi Functional Coverage](functional_coverage_groups.png)
-*(Note: Upload Figure 4 from your report as `functional_coverage_groups.png`)*
+The SystemVerilog UVM subscriber (`axi_lt_subscriber`) maintained 100.00% functional coverage across all 50 expected bins[cite: 1]
 
 * **Address Ranges:** `cp_ARADDR` and `cp_AWADDR` hit 100%, targeting normal, unaligned, and out-of-bounds boundaries[cite: 1].
 * **Data & Strobes:** `cp_WDATA` and `cp_WSTRB` achieved 100%[cite: 1].
@@ -80,14 +64,5 @@ The SystemVerilog UVM subscriber (`axi_lt_subscriber`) maintained 100.00% functi
 ### Assertion Coverage (100%)
 The assertion coverage achieved a perfect 100.00% score on the DUT protocol checks[cite: 1]. 
 
-![Assertion Plan](assertion_plan.png)
-*(Note: Upload Figure 5 from your report as `assertion_plan.png`)*
-
-![Verdi Assertion Coverage](assertion_coverage_results.png)
-*(Note: Upload Figure 6 from your report as `assertion_coverage_results.png`)*
-
 * The bound assertions (`p1_check`, `p2_check`, `p3_check`) logged 10,078 attempts each[cite: 1].
 * Extended test sequences successfully forced the RTL into backpressure scenarios, triggering real, non-vacuous successes validating the SVA logic and handshake wait-states[cite: 1].
-
-## 👤 Author
-**Sagnik Saha** | Employee ID: 6929[cite: 1]
