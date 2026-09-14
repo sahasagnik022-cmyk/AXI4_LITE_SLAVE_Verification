@@ -1,6 +1,5 @@
 class axi_lt_error_test extends axi_lt_test;
     `uvm_component_utils(axi_lt_error_test)
-
     axi_lt_w2_seq w2_seq;
     axi_lt_r2_seq r2_seq;
 
@@ -9,12 +8,8 @@ class axi_lt_error_test extends axi_lt_test;
     endfunction
 
     function void build_phase(uvm_phase phase);
-        // 1. Tell the factory to intercept driver creation
         axi_lt_driver::type_id::set_type_override(axi_lt_error_driver::get_type());
-        
-        // 2. Build the rest of the environment normally
-        super.build_phase(phase);
-        
+        super.build_phase(phase);        
         `uvm_info("TEST", "Factory override applied: Error Driver is active!", UVM_NONE)
     endfunction
 
@@ -22,7 +17,6 @@ class axi_lt_error_test extends axi_lt_test;
         phase.raise_objection(this);
         w2_seq=axi_lt_w2_seq::type_id::create("w2_seq");
         r2_seq=axi_lt_r2_seq::type_id::create("r2_seq");
-
         w2_seq.start(env.in_agt.w_seqr);
         r2_seq.start(env.in_agt.r_seqr);
         phase.drop_objection(this);
