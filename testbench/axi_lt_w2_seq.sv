@@ -12,9 +12,9 @@ class axi_lt_w2_seq extends uvm_sequence#(axi_lt_seq_item);
             start_item(tx);
           if(!tx.randomize() with {write_req==1; read_req==0;awaddr==32'd0; wdata inside {[1:100]}; wstrb==15;})
                 `uvm_error("SEQ","Randomization failed");
-          `uvm_info("DEBUG", "Randomization done", UVM_LOW)
+        `uvm_info("DBG", "Randomization done", UVM_LOW)
             finish_item(tx);
-        `uvm_info("DEBUG", "WRITE SEQUENCE COMPLETED SUCCESSFULLY", UVM_LOW)
+        `uvm_info("DBG", "Write sequence completed", UVM_LOW)
     endtask
 
 endclass
