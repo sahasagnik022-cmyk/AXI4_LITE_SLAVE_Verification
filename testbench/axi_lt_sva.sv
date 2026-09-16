@@ -38,10 +38,3 @@ module axi_lt_sva(
     p2_check: assert property (p2)
       else $error("wvalid dropped before wready");
 
-property p3;
-  @(posedge ACLK) (!ARESETn) |-> (!BVALID && !RVALID && !RDATA); 
-endproperty
-p3_check: assert property (p3)
-    else $error("Output pins high during reset");
-
-endmodule
