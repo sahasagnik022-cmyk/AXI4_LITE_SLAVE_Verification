@@ -28,8 +28,8 @@ module axi_lt_sva(
 
   p1_check: assert property (p1)
       else $error("awvalid dropped before awready");
-  
-     
+
+
   property p2;
       @(posedge ACLK) disable iff (!ARESETn)
       (WVALID && !WREADY) |=> WVALID;
@@ -38,3 +38,20 @@ module axi_lt_sva(
     p2_check: assert property (p2)
       else $error("wvalid dropped before wready");
 
+    property p3;
+      @(posedge ACLK) disable iff (!ARESETn)
+     (ARVALID && !ARREADY) |=> ARVALID;
+   endproperty
+
+   p3_check: assert property (p3)
+      else $error("arvalid dropped before arready");
+
+   property p4;
+      @(posedge ACLK) disable iff (!ARESETn)
+     (RVALID && !RREADY) |=> RVALID;
+   endproperty
+
+    p4_check: assert property (p4)
+       else $error("rvalid dropped before rready");
+
+endmodule
