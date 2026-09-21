@@ -9,12 +9,8 @@ class axi_lt_error_test extends axi_lt_test;
     endfunction
 
     function void build_phase(uvm_phase phase);
-        // 1. Tell the factory to intercept driver creation
         axi_lt_driver::type_id::set_type_override(axi_lt_error_driver::get_type());
-        
-        // 2. Build the rest of the environment normally
         super.build_phase(phase);
-        
         `uvm_info("TEST", "Factory override applied: Error Driver is active!", UVM_NONE)
     endfunction
 

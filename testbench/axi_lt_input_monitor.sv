@@ -35,6 +35,7 @@ class axi_lt_input_monitor extends uvm_monitor;
         axi_lt_seq_item tx;
         forever begin
             @(vif.in_mon_cb);
+        //    `uvm_info("MON",$sformatf("Read Addr:%0d|arready:%0d|arvalid:%0d",vif.in_mon_cb.araddr,vif.in_mon_cb.arready,vif.in_mon_cb.arvalid),UVM_LOW)
             if(vif.in_mon_cb.arvalid && vif.in_mon_cb.arready) begin
                 tx=axi_lt_seq_item::type_id::create("tx");
                 tx.araddr=vif.in_mon_cb.araddr;
@@ -46,6 +47,7 @@ class axi_lt_input_monitor extends uvm_monitor;
 
     task mon_write_addr();
         forever begin
+         //   `uvm_info("MON",$sformatf("Write Addr:%0d|awready:%0d|awvalid:%0d",vif.in_mon_cb.awaddr,vif.in_mon_cb.awready,vif.in_mon_cb.awvalid),UVM_LOW)
             @(vif.in_mon_cb iff (vif.in_mon_cb.awvalid && vif.in_mon_cb.awready));
             c_awaddr=vif.in_mon_cb.awaddr;
             aw_done=1;
@@ -57,6 +59,7 @@ class axi_lt_input_monitor extends uvm_monitor;
     task mon_write_data();
         forever begin
             @(vif.in_mon_cb iff (vif.in_mon_cb.wvalid && vif.in_mon_cb.wready));
+     //       `uvm_info("MON",$sformatf("wready:%0d|wvalid:%0d",vif.in_mon_cb.wready,vif.in_mon_cb.wvalid),UVM_LOW)
             c_wdata=vif.in_mon_cb.wdata;
             c_wstrb=vif.in_mon_cb.wstrb;
             w_done=1;

@@ -24,27 +24,23 @@ class axi_lt_output_monitor extends uvm_monitor;
     task mon_read_resp();
         axi_lt_seq_item tx;
         forever begin
-            @(vif.out_mon_cb);
-            if(vif.out_mon_cb.rready && vif.out_mon_cb.rvalid) begin
-                tx=axi_lt_seq_item::type_id::create("tx");
-                tx.rdata=vif.out_mon_cb.rdata;
-                tx.rresp=vif.out_mon_cb.rresp;
-                tx.read_req=1;
-                ap_out.write(tx);
-            end
+            @(vif.out_mon_cb iff (vif.out_mon_cb.rready && vif.out_mon_cb.rvalid));
+            tx=axi_lt_seq_item::type_id::create("tx");
+            tx.rdata=vif.out_mon_cb.rdata;
+            tx.rresp=vif.out_mon_cb.rresp;
+            tx.read_req=1;
+            ap_out.write(tx);
         end
     endtask
 
     task mon_write_resp();
         axi_lt_seq_item tx;
         forever begin
-            @(vif.out_mon_cb);
-            if(vif.out_mon_cb.bready && vif.out_mon_cb.bvalid) begin
-                tx=axi_lt_seq_item::type_id::create("tx");
-                tx.bresp=vif.out_mon_cb.bresp;
-                tx.write_req=1;
-                ap_out.write(tx);
-            end
+            @(vif.out_mon_cb iff (vif.out_mon_cb.bready && vif.out_mon_cb.bvalid));
+            tx=axi_lt_seq_item::type_id::create("tx");
+            tx.bresp=vif.out_mon_cb.bresp;
+            tx.write_req=1;
+            ap_out.write(tx);
         end
     endtask
 

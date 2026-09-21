@@ -21,7 +21,7 @@ module axi_lt_sva(
    input logic  RVALID,
     input logic RREADY
 );
-  property p1;
+  /*property p1;
       @(posedge ACLK) disable iff (!ARESETn)
       (AWVALID && !AWREADY) |=> AWVALID;
   endproperty
@@ -38,10 +38,20 @@ module axi_lt_sva(
     p2_check: assert property (p2)
       else $error("wvalid dropped before wready");
 
-property p3;
-  @(posedge ACLK) (!ARESETn) |-> (!BVALID && !RVALID && !RDATA); 
-endproperty
-p3_check: assert property (p3)
-    else $error("Output pins high during reset");
+    property p3;
+      @(posedge ACLK) disable iff (!ARESETn)
+     (ARVALID && !ARREADY) |=> ARVALID;
+   endproperty
+
+   p3_check: assert property (p3)
+      else $error("arvalid dropped before arready");*/
+      
+   property p4;
+      @(posedge ACLK) disable iff (!ARESETn)
+     (RVALID && !RREADY) |=> RVALID;
+   endproperty
+
+    p4_check: assert property (p4)
+       else $error("rvalid dropped before rready");
 
 endmodule

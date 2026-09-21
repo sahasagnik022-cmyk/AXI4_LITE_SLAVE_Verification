@@ -81,12 +81,13 @@ bind axi4_lite_slave axi_lt_sva ast(
 initial begin
     uvm_top.set_timeout(50000ns,1);
     uvm_config_db#(virtual axi_lt_if)::set(null,"*","vif",vif);
-    run_test("axi_lt_test");
+   // run_test("axi_lt_test");
+    run_test();
 end
-
+/*
 initial begin
     $fsdbDumpvars(0, tb_top);
     $fsdbDumpSVA;
 end
-  
+ */ 
 endmodule
